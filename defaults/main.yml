@@ -1,7 +1,9 @@
 ---
 
-base_download_url: https://github.com/kbudde/rabbitmq_exporter/releases/download/
-
+# Base download URL of where the binary can be downloaded from. The server must have a folder
+# with the version followed by the binary.
+# Example: http://myserver/v0.17.1/rabbitmq_exporter-0.17.1.linux-amd64.tar.gz
+base_download_url: https://github.com/kbudde/rabbitmq_exporter/releases/download
 
 # Version of the RMQ exporter
 rabbitmq_exporter_version: 0.17.1
@@ -18,3 +20,15 @@ rabbitmq_exporter_user: rabbitmq
 rabbitmq_exporter_group: rabbitmq
 
 # use_systemd: false
+
+# The Address of the RabbitMQ HTTP API
+rabbitmq_exporter_url: 'http://localhost:15672'
+# The username to authenticate with in the RabbitMQ HTTP API
+rabbitmq_exporter_rmq_user: 'guest'
+# The password to authenticate with in the RabbitMQ HTTP API
+rabbitmq_exporter_rmq_password: 'guest'
+# Port the exporter should listen on
+rabbitmq_exporter_port: '9090'
+
+rabbitmq_exporter_output_format: 'TTY'
+rabbitmq_exporter_log_level: 'info'

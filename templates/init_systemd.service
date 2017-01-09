@@ -1,0 +1,11 @@
+[Unit]
+Description=RabbitMQ Prometheus Exporter
+
+[Service]
+ExecStart={{ rabbitmq_exporter_install_dir }}/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64/rabbitmq_exporter
+NonBlocking=true
+WorkingDirectory={{ rabbitmq_exporter_install_dir }}/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64/
+User={{ rabbitmq_exporter_user }}
+Group={{ rabbitmq_exporter_group }}
+Restart=always
+EnvironmentFile={{ rabbitmq_exporter_install_dir }}/rmq_env.vars

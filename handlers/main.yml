@@ -1,0 +1,7 @@
+---
+
+- name: restart rabbmitmq_exporter
+  service:
+    name: rabbmitmq_exporter
+    state: restarted
+    enabled: yes

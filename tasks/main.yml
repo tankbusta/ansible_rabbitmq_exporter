@@ -1,3 +1,57 @@
 ---
+- name: use systemd for Ubuntu >= 16.04
+  set_fact:
+    use_systemd: true
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|int >= 16) and use_systemd is not defined
+
+- name: use upstart for Ubuntu < 16.04
+  set_fact:
+    use_systemd: false
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|int < 16) and use_systemd is not defined
 
 - name: ensure install directory exists
+  file:
+    path: '{{ rabbitmq_exporter_install_dir }}'
+    mode: 0755
+    state: directory
+
+- name: download rabbitmq_exporter to temp directory
+  get_url:
+    url: '{{ base_download_url}}/v{{ rabbitmq_exporter_version }}/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64.tar.gz'
+    dest: '{{ rabbitmq_exporter_tmp_dir }}/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64.tar.gz'
+
+- name: extract rabbitmq_exporter to install directory
+  unarchive:
+    src: /tmp/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64.tar.gz
+    dest: '{{ rabbitmq_exporter_install_dir }}'
+    owner: '{{ rabbitmq_exporter_user }}'
+    group: '{{ rabbitmq_exporter_group }}'
+    remote_src: yes
+    creates: '{{ rabbitmq_exporter_install_dir }}/rabbitmq_exporter-{{ rabbitmq_exporter_version }}.linux-amd64'
+
+- name: create rmq_env.vars file
+  template:
+    src: "templates/rmq_env.vars"
+    dest: "{{ rabbitmq_exporter_install_dir }}/rmq_env.vars"
+    owner: '{{ rabbitmq_exporter_user }}'
+    group: '{{ rabbitmq_exporter_group }}'
+    mode: 0600
+  register: vars_file_changed
+
+- name: copy systemd config to server
+  template:
+    src: "templates/init_systemd.service"
+    dest: "/lib/systemd/system/rabbitmq_exporter.service"
+  when: use_systemd
+
+- name: copy upstart config to server
+  template:
+    src: "templates/init_upstart.conf"
+    dest: "/etc/init/rabbitmq_exporter.conf"
+  when: not use_systemd|bool
+
+- name: set rabbmitmq_exporter status and start (if not already)
+  service:
+    name: rabbitmq_exporter
+    enabled: yes
+    state: started

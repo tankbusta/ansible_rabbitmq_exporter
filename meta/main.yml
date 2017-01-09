@@ -1,0 +1,16 @@
+---
+
+galaxy_info:
+  author: tankbusta
+  description: RabbitMQ Metrics Exporter for use with Prometheus
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - vivid
+        - xenial
+  categories:
+    - monitoring
+    - networking
