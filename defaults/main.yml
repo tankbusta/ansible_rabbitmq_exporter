@@ -1,0 +1,20 @@
+---
+
+base_download_url: https://github.com/kbudde/rabbitmq_exporter/releases/download/
+
+
+# Version of the RMQ exporter
+rabbitmq_exporter_version: 0.17.1
+
+# Path to where the exporter is temporarily downloaded to
+rabbitmq_exporter_tmp_dir: /tmp
+
+# Path to where the exporter is installed to
+rabbitmq_exporter_install_dir: /opt/prometheus/rabbitmq_exporter
+
+# This user/group is what the exporter service will run as. This needs to exist prior to running
+# the playbook. The RMQ user can safely be used
+rabbitmq_exporter_user: rabbitmq
+rabbitmq_exporter_group: rabbitmq
+
+# use_systemd: false
